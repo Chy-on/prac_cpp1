@@ -29,6 +29,8 @@ ASpartaCharacter::ASpartaCharacter()
 	NormalSpeed = 600.0f;
 	SprintSpeedMultiplier = 1.7f;
 	SprintSpeed = NormalSpeed * SprintSpeedMultiplier;
+	BaseSpeed = 600.0f;
+	OffsetDirection = 1.0f;
 
 	GetCharacterMovement()->MaxWalkSpeed = NormalSpeed;
 
@@ -112,7 +114,13 @@ void ASpartaCharacter::Move(const FInputActionValue& value)
 {
 	if (!Controller) return;
 
-	const FVector2D MoveInput = value.Get<FVector2D>();
+	if (GetCharacterMovement())
+	{
+		GetCharacterMovement()->MaxWalkSpeed = NormalSpeed;
+	}
+
+	FVector2D MoveInput = value.Get<FVector2D>();
+	MoveInput = MoveInput * OffsetDirection;
 
 	if (!FMath::IsNearlyZero(MoveInput.X))
 	{
@@ -173,6 +181,17 @@ void ASpartaCharacter::AddHealth(float Amount)
 	Health = FMath::Clamp(Health + Amount, 0.0f, MaxHealth);
 	UpdateOverheadHP();
 }
+
+void ASpartaCharacter::SetNormalSpeed(float Amount)
+{
+	NormalSpeed = BaseSpeed* Amount;
+}
+
+void ASpartaCharacter::SetOffsetDirection(float Offset)
+{
+	OffsetDirection = Offset;
+}
+
 
 float ASpartaCharacter::TakeDamage(
 	float DamageAmount,

@@ -31,6 +31,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category="health")
 	void AddHealth(float Amount);
 
+	UFUNCTION(BlueprintCallable, Category="speed")
+	void SetNormalSpeed(float Amount);
+
+	UFUNCTION(BlueprintCallable, Category="direction")
+	void SetOffsetDirection(float Offset);
+
 	virtual void BeginPlay() override;
 
 
@@ -66,5 +72,7 @@ private:
 	float NormalSpeed;
 	float SprintSpeedMultiplier;
 	float SprintSpeed;
+	float BaseSpeed;
+	float OffsetDirection;
 
 };
