@@ -126,6 +126,20 @@ void ASpartaPlayerController::ShowMainMenu(bool bIsRestart)
 					));
 				}
 			}
+
+			UFunction* PlayAnimFunc2 = MainMenuWidgetInstance->FindFunction(FName("PlayFadeOutAnim"));
+			if (PlayAnimFunc2)
+			{
+				MainMenuWidgetInstance->ProcessEvent(PlayAnimFunc2, nullptr);
+			}
+		}
+		else
+		{
+			UFunction* PlayAnimFunc = MainMenuWidgetInstance->FindFunction(FName("PlayFadeInAnim"));
+			if (PlayAnimFunc)
+			{
+				MainMenuWidgetInstance->ProcessEvent(PlayAnimFunc, nullptr);
+			}
 		}
 	}
 }
