@@ -4,6 +4,8 @@
 #include "Blueprint/UserWidget.h"
 #include "Components/TextBlock.h"
 #include "SpartaGameInstance.h"
+#include "Components/Button.h"
+#include "Components/CanvasPanelSlot.h"
 #include "Kismet/GameplayStatics.h"
 
 ASpartaPlayerController::ASpartaPlayerController()
@@ -81,6 +83,32 @@ void ASpartaPlayerController::ShowMainMenu(bool bIsRestart)
 			}
 		}
 
+		if (UButton* Button = Cast<UButton>(MainMenuWidgetInstance->GetWidgetFromName(TEXT("MainMenuButton"))))
+		{
+			if (bIsRestart)
+			{
+				Button->SetVisibility(ESlateVisibility::Visible);
+			}else
+			{
+				Button->SetVisibility(ESlateVisibility::Collapsed);
+			}
+		}
+		
+		if (UButton* Button = Cast<UButton>(MainMenuWidgetInstance->GetWidgetFromName(TEXT("ExitButton"))))
+		{
+			if (UCanvasPanelSlot* CanvasSlot = Cast<UCanvasPanelSlot>(Button->Slot))
+			{
+				FVector2D CurrentPosition = CanvasSlot->GetPosition();
+				if (bIsRestart)
+				{
+					CanvasSlot->SetPosition(FVector2D(CurrentPosition.X,800.0f));
+				}else
+				{
+					CanvasSlot->SetPosition(FVector2D(CurrentPosition.X,650.0f));
+				}	
+			}
+		}
+		
 		if (bIsRestart)
 		{
 			UFunction* PlayAnimFunc = MainMenuWidgetInstance->FindFunction(FName("PlayGameOverAnim"));
@@ -145,6 +173,11 @@ void ASpartaPlayerController::StartGame()
 
 	UGameplayStatics::OpenLevel(GetWorld(),FName("BasicLevel"));
 	SetPause(false);
+}
+
+void ASpartaPlayerController::ExitGame()
+{
+	UKismetSystemLibrary::QuitGame(this, this, EQuitPreference::Quit, false);
 }
 
 

@@ -45,8 +45,11 @@ public:
 	void ShowGameHUD();
 	UFUNCTION(BlueprintCallable, Category = "Menu")
 	void ShowMainMenu(bool bIsRestart);
+	
 	UFUNCTION(BlueprintCallable, Category = "Menu")
 	void StartGame();
+	UFUNCTION(BlueprintCallable, Category = "Menu")
+	void ExitGame();
 
 	virtual void BeginPlay() override;
 };
