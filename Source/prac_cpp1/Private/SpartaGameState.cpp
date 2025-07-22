@@ -3,9 +3,13 @@
 #include "Kismet/GameplayStatics.h"
 #include "SpawnVolume.h"
 #include "CoinItem.h"
+#include "SpartaCharacter.h"
 #include "SpartaPlayerController.h"
 #include "Components/TextBlock.h"
 #include "Blueprint/UserWidget.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "Camera/CameraComponent.h"
+
 
 ASpartaGameState::ASpartaGameState()
 {
@@ -86,6 +90,53 @@ void ASpartaGameState::StartWave()
 	
 	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green,
 		FString::Printf(TEXT("Wave %d !!!"),CurrentWaveIndex));
+
+	if (APlayerController* PlayerController = GetWorld()->GetFirstPlayerController())
+	{
+		if (ASpartaCharacter* PlayerCharacter = Cast<ASpartaCharacter>(PlayerController->GetCharacter()))
+		{
+			UCharacterMovementComponent* Movement = Cast<UCharacterMovementComponent>(PlayerCharacter->GetMovementComponent());
+			UCameraComponent* PlayerCamera = PlayerCharacter->FindComponentByClass<UCameraComponent>();
+
+			if (CurrentWaveIndex ==3)
+			{
+				if (Movement)
+				{
+					Movement->GroundFriction = 0.1f;
+					Movement->BrakingDecelerationWalking = 200.0f;
+				}
+				if (PlayerCamera)
+				{
+					PlayerCamera->PostProcessSettings.bOverride_VignetteIntensity = true;
+					PlayerCamera->PostProcessSettings.VignetteIntensity = 5.0f;
+				}
+			}
+			else if (CurrentWaveIndex == 2)
+			{
+				if (Movement)
+				{
+					Movement->GroundFriction = 0.1f;
+					Movement->BrakingDecelerationWalking = 200.0f;
+				}
+				if (PlayerCamera)
+				{
+					PlayerCamera->PostProcessSettings.bOverride_VignetteIntensity = false;
+				}
+			}
+			else
+			{
+				if (Movement)
+				{
+					Movement->GroundFriction = 8.0f;
+					Movement->BrakingDecelerationWalking = 2048.0f;
+				}
+				if (PlayerCamera)
+				{
+					PlayerCamera->PostProcessSettings.bOverride_VignetteIntensity = false;
+				}
+			}
+		}
+	}
 	
 	SpawnedCoinCount = 0;
 	CollectedCoinCount = 0;
