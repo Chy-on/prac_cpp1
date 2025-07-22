@@ -279,6 +279,23 @@ void ASpartaGameState::UpdateHUD()
 				{
 					LevelIndexText->SetText(FText::FromString(FString::Printf(TEXT("Level: %d"),CurrentLevelIndex+1)));
 				}
+				
+				if (UTextBlock* NoticeText = Cast<UTextBlock>(HUDWidget->GetWidgetFromName(TEXT("Notice"))))
+				{
+					if (CurrentWaveIndex == 3)
+					{
+						NoticeText->SetText(FText::FromString(FString::Printf(TEXT("시야가 어두워집니다!!"))));
+					}
+					else if (CurrentWaveIndex == 2)
+					{
+						NoticeText->SetText(FText::FromString(FString::Printf(TEXT("바닥이 미끄러워집니다!"))));
+					}
+					else
+					{
+						NoticeText->SetText(FText::FromString(FString::Printf(TEXT(" "))));
+					}
+				}
+
 			}
 		}
 	}
